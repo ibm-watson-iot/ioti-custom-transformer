@@ -1,0 +1,21 @@
+{
+  "name": "custom-transformer",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./app/app.js",
+    "lint": "eslint app"
+  },
+  "engines": {
+    "node": "6.10.1"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "debug": "^2.6.8",
+    "ibmiotf": "^0.2.37",
+    "pluralize": "^5.0.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "winston": "^2.3.1"
+  }
+}

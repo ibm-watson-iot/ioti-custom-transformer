@@ -1,0 +1,4 @@
+app/config/*
+!app/config/config.js
+!app/config/config-template.js
+*.iml
