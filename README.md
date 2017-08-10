@@ -10,7 +10,7 @@ Therefore the device Id must be associated with the user beforehand
 so that we know that it exists and to which user it belongs.
 This can be done through our API service.
 
-If new events where found, it will send them to our IoT Platform 
+If new events where found, it will add the userId to them and send them to our IoT Platform 
 and then arrive at the shield engine. 
 That is why we also check if the device is already registered in the IoTPlatform, and if not we register it. 
 
