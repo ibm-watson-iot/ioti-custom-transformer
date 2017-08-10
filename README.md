@@ -1,15 +1,20 @@
 # iot4i custom transfomer
-Custom transformer for your device events. So that they can be accepted by our IoT Engine.
+Custom transformer for your device events. So that they can be accepted by our IoT shield engine.
 
-This custom transformer shows how one can be implemented for Wally devices.
-It will poll the Wally endpoint for updates, query all data and check for new events.
+This custom transformer shows how a transformer can be implemented for Wally devices.
 
-On each poll we check for new devices and create them in iotpf. 
-The device must be associated with the user beforehand so that we know to which user it belongs.
+In short, it will poll the Wally endpoint for updates, query all data and check for new events.
+We only check for updates on known devices. 
 
-If new events where found, it will send them to our IoT Platform.
+Therefore the device Id must be associated with the user beforehand 
+so that we know that it exists and to which user it belongs.
+This can be done through our API service.
 
-We also provide generic adapter to communicate with a rest API.
+If new events where found, it will send them to our IoT Platform 
+and then arrive at the shield engine. 
+That is why we also check if the device is already registered in the IoTPlatform, and if not we register it. 
+
+Finally, we also provide a generic adapter to communicate with a rest API.
 
 ### Configuration
 The configuration file is in `app/config`.
@@ -36,4 +41,6 @@ You will need the following things properly installed on your computer.
 
 ### Deploying
 
-* upload everything to a server and run `npm start`
+* upload the source code to a server and run 
+  * `npm install`
+  * `npm start`
