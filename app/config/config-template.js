@@ -8,7 +8,10 @@ module.exports = function(config) {
   process.env.WALLY_TOKEN = '';
 
   // if we should create devices in iotpf
-  process.env.WALLY_CREATE_DEVICES = true;
+  process.env.WALLY_CREATE_DEVICES = 'true';
+
+  // if we should only process devices registered with IoT4I
+  process.env.WALLY_FILTER_DEVICES = 'false';
 
   config.tenantId = '';
 
@@ -36,12 +39,15 @@ module.exports = function(config) {
   };
 
   config.wally = {
+    deviceFilter: process.env.WALLY_FILTER_DEVICES === 'true',
     token: process.env.WALLY_TOKEN,
-    shouldCreateDevices: process.env.WALLY_CREATE_DEVICES,
+    shouldCreateDevices: process.env.WALLY_CREATE_DEVICES === 'true',
     pollingInterval: process.env.WALLY_POLL_INTERVAL,
     accounts: `https://api.snsr.net/v2/${process.env.WALLY_ORG}/accounts`,
-    events: `https://api.snsr.net/v2/${process.env.WALLY_ORG}/:place/events?time=-${process.env.WALLY_POLL_INTERVAL}m`,
-    activities: `https://api.snsr.net/v2/${process.env.WALLY_ORG}/:place/activities?time=-${process.env.WALLY_POLL_INTERVAL}m`
+    events:
+    `https://api.snsr.net/v2/${process.env.WALLY_ORG}/:place/events?time=-${process.env.WALLY_POLL_INTERVAL}m`,
+    activities:
+    `https://api.snsr.net/v2/${process.env.WALLY_ORG}/:place/activities?time=-${process.env.WALLY_POLL_INTERVAL}m`
   };
 
   return config;

@@ -98,6 +98,11 @@ class WallyProvider {
   }
 
   getUsersDevices() {
+
+    if (!this.config.deviceFilter) {
+      return Promise.resolve([]);
+    }
+
     const method = 'WallyProvider.getUsersDevices';
     const queryParams = { limit: 50000, vendor: 'Wally' };
     return this.appClient.findAll('devices', queryParams).then((data) => {
@@ -155,7 +160,8 @@ class WallyProvider {
     sensorsData.forEach((sensorData) => {
       const sensorIds = Object.keys(sensorData);
       sensorIds.forEach((sensorId) => {
-        if (!userDevices[sensorId]) {
+        const gatewayId = sensorData[sensorId][0].gateway;
+        if (this.config.deviceFilter && !userDevices[sensorId] && !userDevices[gatewayId]) {
           logger.warn(method, 'Unknown Sensor ', sensorId);
           return;
         }
@@ -184,7 +190,7 @@ class WallyProvider {
         deviceType: this.deviceType,
         id: sensorReading.id,
         snid: sensorReading.snid,
-        userId: userId,
+        gatewayId: sensorReading.gateway,
         type: sensorReading.type,
         hwType: sensorReading.hwType,
         location: {
@@ -193,6 +199,10 @@ class WallyProvider {
           appliance: sensorReading.appliance
         }
       };
+
+      if (userId !== undefined) {
+        event.userId = userId;
+      }
 
       if (sensorReading.payload) {
         event.data_type = 'EVENT';

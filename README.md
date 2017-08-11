@@ -1,22 +1,23 @@
-# iot4i custom transfomer
+# IoT4I Custom Transfomer
+
 Custom transformer for your device events. So that they can be accepted by our IoT shield engine.
 
+## Wally Provider
+
 This custom transformer shows how a transformer can be implemented for Wally devices.
+The provider polls the Wally endpoint for updates, queries all data and checks for new events.
+If new events are  found, the provider will publish them
 
-In short, it will poll the Wally endpoint for updates, query all data and check for new events.
-We only check for updates on known devices. 
+By default the transformer does not filter the source device. If you want the provider to only work with known devices,
+you need to switch the `deviceFilter` on in the configuration file. Once enabled the filter will use device information
+provided by the IoT4I API service to filter which device data to use.
 
-Therefore the device Id must be associated with the user beforehand 
-so that we know that it exists and to which user it belongs.
-This can be done through our API service.
+If deviceFilter is toggled than you need to provide the API configuration information API URL, access token etc.
 
-If new events where found, it will add the userId to them and send them to our IoT Platform 
-and then arrive at the shield engine. 
-That is why we also check if the device is already registered in the IoTPlatform, and if not we register it. 
-
-Finally, we also provide a generic adapter to communicate with a rest API.
+The example includes a generic adapter to communicate with a rest API.
 
 ### Configuration
+
 The configuration file is in `app/config`.
 By default it will use the `config-dev.js` file. If you want another file to be used, set the environment
 variable `APP_ENV` to another name, e.g. `prod` to use the file `config-prod.js`.
@@ -41,6 +42,6 @@ You will need the following things properly installed on your computer.
 
 ### Deploying
 
-* upload the source code to a server and run 
+* upload the source code to a server and run
   * `npm install`
   * `npm start`
