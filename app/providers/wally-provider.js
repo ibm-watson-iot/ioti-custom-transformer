@@ -19,7 +19,7 @@ class WallyProvider {
     this.pollingRound = 0;
     this.desiredRole = 'administrator';
     this.iotwhiApiClient = new IoTWHIApiClient(
-      config.apiConfig.host, config.apiConfig.path, configl.tenantId, config.apiConfig.auth);
+      config.apiConfig.host, config.apiConfig.path, config.tenantId, config.apiConfig.auth);
   }
 
   start() {
@@ -278,8 +278,7 @@ class WallyProvider {
     const promises = events.map((event) => {
       return this.iotPlatformClient.publishDeviceEvent(
         this.deviceType, event.snid, 'event', 'json', JSON.stringify(event), undefined
-      )
-      .catch((err) => {
+      ).catch((err) => {
         logger.warn(method, 'failed to send event', event, err.stack || err);
       });
     });
