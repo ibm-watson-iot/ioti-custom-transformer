@@ -1,6 +1,6 @@
 {
-  "name": "custom-transformer",
-  "version": "0.0.1",
+  "name": "iotwhi-custom-transformer",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node ./app/app.js",
@@ -10,6 +10,7 @@
     "node": "6.10.1"
   },
   "dependencies": {
+    "iotwhi-api-client": "git+ssh://git@github.com:ibm-watson-iot/iotwhi-api-client.git#28d6bc6",
     "bluebird": "^3.5.0",
     "debug": "^2.6.8",
     "ibmiotf": "^0.2.37",

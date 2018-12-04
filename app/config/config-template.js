@@ -18,7 +18,7 @@ module.exports = function(config) {
   // iot4i api config
   config.apiConfig = {
     host: 'http://localhost:10010',
-    path: 'api/v1/' + config.tenantId,
+    path: 'api/v1',
     auth: 'Bearer <API TOKEN>'
   };
 

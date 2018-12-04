@@ -1,15 +1,15 @@
 'use strict';
 
-const request = require('request-promise');
-const config = require('../config/config');
 const ibmiotf = require('ibmiotf');
 const Promise = require('bluebird');
+const request = require('request-promise');
+const config = require('../config/config');
 const logger = require('../utils/logger');
+const IoTWHIApiClient = require('iotwhi-api-client').IoTWHIApiClient;
 
 class WallyProvider {
 
   constructor() {
-    this.appClient = require('../api-adapter/adapter');
     this.config = config.wally;
     this.processedSensorEventTime = {};
     this.createdIotpDevice = {};
@@ -17,6 +17,9 @@ class WallyProvider {
     this.iotPlatformClient.publishDeviceEvent = Promise.promisify(this.iotPlatformClient.publishDeviceEvent);
     this.deviceType = 'Wally';
     this.pollingRound = 0;
+    this.desiredRole = 'administrator';
+    this.iotwhiApiClient = new IoTWHIApiClient(
+      config.apiConfig.host, config.apiConfig.path, configl.tenantId, config.apiConfig.auth);
   }
 
   start() {
@@ -98,26 +101,26 @@ class WallyProvider {
   }
 
   getUsersDevices() {
-
     if (!this.config.deviceFilter) {
       return Promise.resolve([]);
     }
-
     const method = 'WallyProvider.getUsersDevices';
     const queryParams = { limit: 50000, vendor: 'Wally' };
-    return this.appClient.findAll('devices', queryParams).then((data) => {
-      logger.info(method, 'got all devices');
-      logger.debug(method, 'devices:', JSON.stringify(data, null, 2));
-      return data.items.reduce((mapping, doc) => {
-        const vendorId = doc.vendorId;
-        const userId = doc.userId;
-        mapping[vendorId] = userId;
-        return mapping;
-      }, {});
-    }).catch((err) => {
-      logger.error(method, 'failed to get all devices', err.stack || err);
-      return {};
-    });
+    return this.iotwhiApiClient.findAll('devices', queryParams, this.desiredRole)
+      .then((data) => {
+        logger.info(method, 'got all devices');
+        logger.debug(method, 'devices:', JSON.stringify(data, null, 2));
+        return data.items.reduce((mapping, doc) => {
+          const vendorId = doc.vendorId;
+          const userId = doc.userId;
+          mapping[vendorId] = userId;
+          return mapping;
+        }, {});
+      })
+      .catch((err) => {
+        logger.error(method, 'failed to get all devices', err.stack || err);
+        return {};
+      });
   }
 
   getAllSensorsData(places) {
